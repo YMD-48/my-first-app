@@ -1,0 +1,52 @@
+@charset "utf-8";
+
+html{
+    width:auto;
+
+}
+
+h1{
+    font-size:24px;
+    text-align:center;
+    padding-top:20px;
+    padding-bottom:20px;
+}
+
+img{
+    height:300px;
+    width:300px;
+}
+.table{
+    display: flex;
+    text-align:center;
+}
+.table_td{
+    text-align:center;
+}
+
+.kakunin{
+    width:500px;
+    text-align:center;
+    margin-left:auto;
+    margin-right:auto;
+    height:auto;
+}
+
+input{
+    margin-left:20%;
+    margin-top:50%;
+    margin-bottom: 50%;
+    
+}
+
+button{
+    margin:20px;
+}
+
+iframe{
+    width: 500px;
+    height:500px;
+    margin-left:auto;
+    margin-right:auto;
+
+}
