@@ -9,10 +9,10 @@ const Map = (props) => {
   //props.history.push("Map");
   ///APIリクエスト
   <>
-      <script src="https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Museum%20of%20Contemporary%20Art%20Australia&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key=AIzaSyCRnSptxnNkGyCYRPMqBmWxoQ-sEfen_HY"
+      <script src="https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Museum%20of%20Contemporary%20Art%20Australia&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key=''"
     async defer
     ></script>
-    <script src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AnOTXYXwLujYGG_5cxUJxMckY59RExdztiBPAgLB2s_gIN7VOJvErkZxl95-4VhL" async defer></script>
+    <script src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=''" async defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </>
  
