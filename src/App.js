@@ -1,10 +1,13 @@
 
 import React, { useState, useEffect } from "react";
-import TaskItem from "./TaskItem";
 import { db } from "./firebase";
 import "./reset.css";
 import "./style.css";
-import Map from "./Map";
+//import nextFlow from "./nextFlow";
+import Data from "./Data";
+import { BrowserRouter, Route} from 'react-router-dom';
+import firebase from "firebase/app";
+
 
 import ImgPath_small from "./images/small.jpg";
 import ImgPath_middle from "./images/middle.jpg";
@@ -86,7 +89,7 @@ const App = () => {
       name: inputName,
       mail: inputMail,
       phone: inputPhone,
-      time:null
+      time: firebase.firestore.FieldValue.serverTimestamp()
 
 
     });
@@ -100,7 +103,19 @@ const App = () => {
     setInputName("");
     setInputMail("");
     setInputPhone("");
+      
+    return(
+      <>
+      <BrowserRouter>
+        <div>
+          <Route exact path="/kakunin" component={Data} />
+        </div>
+      </BrowserRouter>
+      </>
+    );
+
     
+
   };
 
   // 2.記述
@@ -234,41 +249,21 @@ const App = () => {
         </tr>
         <br/>
         <button disabled={!inputName&&!inputMail&&inputPhone} onClick={addInputData}>
-        確認画面へ進む
+          
+            確認画面へ進む
+          
         </button>
-      
-
-
 
       </form>
+
+      
 
       </div>
 
        {/* 登録の処理　ボタン */}
       
       
-      {/* dataっていう変数のなかに全てのデータが入っているのでmapを使って展開 */}
-      {data.map((dataItem) => (
-        ///<h1 key={dataItem.id}>{dataItem.title}</h1>
-    
-        
-          <TaskItem
-          id={dataItem.id}
-          azukeru={dataItem.azukeru}
-          uketoru={dataItem.uketoru}
-          item1={dataItem.item1}
-          item2={dataItem.item2}
-          item3={dataItem.item3}
-          item4={dataItem.item4}
-          item5={dataItem.item5}
-          name={dataItem.name}
-          mail={dataItem.mail}
-          phone={dataItem.phone}
-
-          /> 
-      ))}
-      <button onClick={Map}></button>
-      <Map />
+     
 
     </>  
   );

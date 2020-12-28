@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+import 'firebase/database';
 
 // .envに書いたファイルを参照している
 const firebaseApp = firebase.initializeApp({
