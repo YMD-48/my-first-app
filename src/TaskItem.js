@@ -7,7 +7,7 @@ const TaskItem = ({ id,azukeru,uketoru,item1,item2,item3,item4,item5, name,mail,
     db.collection("irai").doc(id).delete();
   };
   return (
-    <>
+  
     <tr key={id}>
       <th>預け地:</th>
       <td>{azukeru}/</td>
@@ -36,11 +36,11 @@ const TaskItem = ({ id,azukeru,uketoru,item1,item2,item3,item4,item5, name,mail,
 
 
       <td>
-      <button onClick={DeleteInputData}>
+      <button onClick={DeleteInputData}>削除
       </button>
       </td>
     </tr>
-    </>
+    
   );
 
 

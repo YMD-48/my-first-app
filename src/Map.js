@@ -1,59 +1,56 @@
-/* global google */
-import React from 'react'
+var _map;
 
+// 地図の初期化
+var initMap = function() {
+	_map = new google.maps.Map(document.getElementById("map"), {
+		zoom : 13,
+		center: new google.maps.LatLng(35.692141, 139.759844),
+		mayTypeId: google.maps.MapTypeId.ROADMAP
+	});
+};
 
+// ルート検索実行
+var calcRoute = function() {	
+	// 経由地の配列を生成
+	var wayPoints = new Array();
+	wayPoints.push({location: '東京タワー'});
+	wayPoints.push({location: 'スカイツリー'});
+	wayPoints.push({location: '池袋サンシャインビル'});
+	wayPoints.push({location: '東京都庁'});
+	wayPoints.push({location: 'お台場'});
 
+	// DirectionsService生成
+	var directionsService = new google.maps.DirectionsService();
 
-const Map = (props) => {
+	// DirectionｓRenderer生成
+	var directionsRenderer = new google.maps.DirectionsRenderer();
+	directionsRenderer.setPanel(document.getElementById('route-panel'));
+	directionsRenderer.setMap(_map);
 
-  //props.history.push("Map");
-  ///APIリクエスト
-  <>
-      <script src="https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Museum%20of%20Contemporary%20Art%20Australia&inputtype=textquery&fields=photos,formatted_address,name,rating,opening_hours,geometry&key=''"
-    async defer
-    ></script>
-    <script src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=''" async defer></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  </>
- 
-function test(){
-
-    var map;
-    var pyrmont = new google.maps.LatLng(-33.8665433,151.1956316);
-      
-      //function createMap(pyrmont) {
-        map = new google.maps.Map(document.getElementById('map'),pyrmont);
-        
-        //, {
-          //center: pyrmont,
-         // zoom: 15
-       // });
-     // }
-     // createMap(pyrmont);
-
-  }
-
-  ///データ受け取り
-
- 
-
-  return (
-
-<>
-
- 
- <div id="myMap">
- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.720399410683!2d135.52378736610606!3d34.687005541457445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e0cd5c283afd%3A0xf01d07d5ca11e41!2z5aSn6Ziq5Z-O!5e0!3m2!1sja!2sjp!4v1608035725840!5m2!1sja!2sjp"></iframe>
-
-
- </div>
- <button onClick={Map}>テスト</button>
- 
-
-
-</>
-  )
- 
-}
-
-export default Map
+	// ルート検索実行
+	directionsService.route({
+		origin: 'マルテープ',  // 出発地
+		destination: '六本木ヒルズ',  // 到着地
+		avoidHighways: true, // 高速は利用しない
+		travelMode: google.maps.TravelMode.DRIVING, // 車モード
+		optimizeWaypoints: true, // 最適化を有効
+		waypoints: wayPoints // 経由地
+	}, function(response, status) {
+		console.log(response);
+		if (status === google.maps.DirectionsStatus.OK) {
+			directionsRenderer.setDirections(response);
+			var legs = response.routes[0].legs;
+			
+			// 総距離と総時間の合計する
+			var dis = 0;
+			var sec = 0;
+			$.each(legs, function(i, val) {
+				sec += val.duration.value;
+				dis += val.distance.value;
+			});
+			console.log("distance=" + dis + ", secound=" + sec);
+		} else {
+			alert('Directions 失敗(' + status + ')');
+		}
+	});	
+};	
