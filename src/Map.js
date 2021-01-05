@@ -1,56 +1,62 @@
-var _map;
+import React from 'react';
 
-// 地図の初期化
-var initMap = function() {
-	_map = new google.maps.Map(document.getElementById("map"), {
-		zoom : 13,
-		center: new google.maps.LatLng(35.692141, 139.759844),
-		mayTypeId: google.maps.MapTypeId.ROADMAP
-	});
-};
+export default class Form1 extends React.Component {
 
-// ルート検索実行
-var calcRoute = function() {	
-	// 経由地の配列を生成
-	var wayPoints = new Array();
-	wayPoints.push({location: '東京タワー'});
-	wayPoints.push({location: 'スカイツリー'});
-	wayPoints.push({location: '池袋サンシャインビル'});
-	wayPoints.push({location: '東京都庁'});
-	wayPoints.push({location: 'お台場'});
+  constructor(props){
+    super(props);
+    this.state = {
+      usstate: props.initState,
+      desc: 'This is for a text area.'
+    };
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onTextAreaChange = this.onTextAreaChange.bind(this);
+  }
 
-	// DirectionsService生成
-	var directionsService = new google.maps.DirectionsService();
+  onChange(e){
+    console.log(e.target.value);
+    this.setState({ usstate: e.target.value});
+  }
 
-	// DirectionｓRenderer生成
-	var directionsRenderer = new google.maps.DirectionsRenderer();
-	directionsRenderer.setPanel(document.getElementById('route-panel'));
-	directionsRenderer.setMap(_map);
+  onSubmit(e){
+    e.preventDefault();
+    console.log("onSubmit");
+    console.log(this.state);
+  }
 
-	// ルート検索実行
-	directionsService.route({
-		origin: 'マルテープ',  // 出発地
-		destination: '六本木ヒルズ',  // 到着地
-		avoidHighways: true, // 高速は利用しない
-		travelMode: google.maps.TravelMode.DRIVING, // 車モード
-		optimizeWaypoints: true, // 最適化を有効
-		waypoints: wayPoints // 経由地
-	}, function(response, status) {
-		console.log(response);
-		if (status === google.maps.DirectionsStatus.OK) {
-			directionsRenderer.setDirections(response);
-			var legs = response.routes[0].legs;
-			
-			// 総距離と総時間の合計する
-			var dis = 0;
-			var sec = 0;
-			$.each(legs, function(i, val) {
-				sec += val.duration.value;
-				dis += val.distance.value;
-			});
-			console.log("distance=" + dis + ", secound=" + sec);
-		} else {
-			alert('Directions 失敗(' + status + ')');
-		}
-	});	
-};	
+  onTextAreaChange(e){
+    this.setState({ desc: e.target.value });
+  }
+
+  render() {
+    var states = [
+      { code: "CA", name: "California" },
+      { code: "HI", name: "Hawaii" },
+      { code: "TX", name: "Texas"},
+      { code: "WA", name: "Washington"} ];
+    var options = states.map(
+      (n)=>(
+        <option key={n.code} value={n.code}>
+          {n.name}
+        </option>
+      )
+    );
+    return (
+      <form onSubmit={this.onSubmit}>
+        <div>
+          <select
+            value={this.state.usstate}
+            onChange={this.onChange}>
+            {options}
+          </select>
+        </div>
+        <textarea
+          value={this.state.desc}
+          onChange={this.onTextAreaChange}/>
+        <div>
+          <button type="submit">OK</button>
+        </div>
+      </form>
+    );
+  }
+}

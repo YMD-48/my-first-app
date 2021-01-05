@@ -4,6 +4,7 @@ import App from "./App";
 import Data from "./Data";
 import Place from "./Place";
 import MapWithADirectionsRenderer from "./reactMap";
+import Map from "./Map";
 
 
 
@@ -14,3 +15,4 @@ import MapWithADirectionsRenderer from "./reactMap";
 
 //ReactDOM.render(<GoogleMapComponent />, document.getElementById("root"));
 ReactDOM.render(<MapWithADirectionsRenderer directions />, document.getElementById("root"));
+//ReactDOM.render(<Map />, document.getElementById("root"));
