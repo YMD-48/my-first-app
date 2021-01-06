@@ -13,7 +13,7 @@ import {
 
 } from "react-google-maps";
 
-//const google=window.google
+
 
 
 
@@ -40,26 +40,23 @@ const MapWithADirectionsRenderer = compose(
         //$('#route-panel').html('');
         //$('#result').addClass('hidden');
       };
-/*
+
       //for文で経由地点分を繰り返して、場所の値をとってくるパターン。
-      const calcRoute = function() {
-        clearRoute();
       var wayPoints = new Array();
-      let Way = this.way
-      for (var i=1; i<=5; i++) {
-        wayPoints.push({location: $('#way' + i).val()});
+      for (var i=1; i<=6; i++) {
+        wayPoints.push({location :i});
       }
       
     //var way1 = useRef(null);
-    */
+    /*
     //単純に経由地点を入れているパターン。
      var wayPoints = new Array();
      wayPoints.push({location: '東京タワー'});
      wayPoints.push({location: 'スカイツリー'});
-     wayPoints.push({location: '池袋サンシャインビル'});
-     wayPoints.push({location: '東京都庁'});
-     wayPoints.push({location: 'お台場'});
-     
+     wayPoints.push({location: ''});
+     wayPoints.push({location: ''});
+     wayPoints.push({location: ''});
+     */
 
       DirectionsService.route(
         {

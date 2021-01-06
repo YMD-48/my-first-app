@@ -12,7 +12,7 @@ import Map from "./Map";
 
 //jqueryの読み込み
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+ReactDOM.render(<Map />, document.getElementById("root"));
 //ReactDOM.render(<GoogleMapComponent />, document.getElementById("root"));
-ReactDOM.render(<MapWithADirectionsRenderer directions />, document.getElementById("root"));
+//ReactDOM.render(<MapWithADirectionsRenderer directions />, document.getElementById("root"));
 //ReactDOM.render(<Map />, document.getElementById("root"));

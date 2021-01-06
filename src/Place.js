@@ -60,13 +60,16 @@ const Place = () => {
 
   //条件指定でデータを抜き出す予定のコード
 
-  db.collection("irai").where("azukeru", "==", "京都")
+  db.collection("irai").where("status", "==", "×")
   .get()
   .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         
-      
         console.log(doc.id, " => ", doc.data().azukeru);
+        console.log(querySnapshot.size);
+        ///if(querySnapshot.size===null){
+          ///console.log("全ての配達終了");
+        ///};
         
       });
   })
@@ -93,7 +96,7 @@ const Place = () => {
           
 
 
-         <textarea value={setData.azukeru}>
+         <textarea defaultValue={setData.azukeru}>
 
          </textarea>
 

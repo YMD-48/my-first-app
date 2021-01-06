@@ -21,7 +21,8 @@ const Data = () => {
     name:"",
     mail:"",
     phone:"",
-    time:null
+    time:null,
+    status:"×"
   
   }]);
 
