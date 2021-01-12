@@ -35,6 +35,11 @@ const MapWithADirectionsRenderer = compose(
   
 
   lifecycle({
+
+
+
+
+    
     componentDidMount() {
       const DirectionsService = new google.maps.DirectionsService();
       var wayPoints = new Array();
@@ -43,7 +48,7 @@ const MapWithADirectionsRenderer = compose(
       /*
       wayPoints.push({location: '東京タワー'});
       wayPoints.push({location: 'スカイツリー'});
-      */
+      
     render(function(querySnapshot) {
      for (var i=1; i<=querySnapshot.size; i++) {
       wayPoints.push({location :"清水寺"});
@@ -51,14 +56,16 @@ const MapWithADirectionsRenderer = compose(
     }
     
     });
+    */
 
       //データベースアクセスのFOR文はなぜかダメ
+      const mainMap1 = async function() { 
       db.collection("irai").where("status", "==", "×")
       .get()
       .then(function(querySnapshot) {    
             //console.log(doc.id, " => ", doc.data().azukeru);
             console.log(querySnapshot.size);
-            wayPoints.push({location: '東京タワー'});
+            //wayPoints.push({location: '東京タワー'});
             ///if(querySnapshot.size===null){
               ///console.log("全ての配達終了");
             ///};
@@ -71,8 +78,9 @@ const MapWithADirectionsRenderer = compose(
       .catch(function(error) {
           console.log("Error getting documents: ", error);
       });
+    };
 
-      DirectionsService.route(
+    const mainMap2 = async function(){DirectionsService.route(
        /// console.log(wayPoints),
 
         {
@@ -96,16 +104,23 @@ const MapWithADirectionsRenderer = compose(
             console.error(`error fetching directions ${result}`);
           }
         }
-      );
+      )};
+
+      const processAll = async function() {
+        await mainMap1();
+        await mainMap2();
+      };
+      
+      processAll();
 
      // new window.google.maps
       
           // ルートをクリア
-      const clearRoute = function() {
-        DirectionsService.setMap(null);
+      //const clearRoute = function() {
+        //DirectionsService.setMap(null);
         //$('#route-panel').html('');
         //$('#result').addClass('hidden');
-      };
+      
 
       //for文で経由地点分を繰り返して、場所の値をとってくるパターン。
 
