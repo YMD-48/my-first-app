@@ -32,12 +32,6 @@ img{
     height:auto;
 }
 
-input{
-    margin-left:20%;
-    margin-top:50%;
-    margin-bottom: 50%;
-    
-}
 
 button{
     margin:20px;
@@ -53,4 +47,16 @@ iframe{
 tr{
     width: 100%;
     position:center;
+}
+
+#AzukeruMap{
+    margin-bottom: 100px;
+}
+
+.Itembase{
+    height:20px;
+    width:100px;
+    margin-top: 140px;
+    margin-bottom: 140px;
+    margin-left: 20px;
 }

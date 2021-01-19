@@ -1,35 +1,31 @@
+import Direction from "./Direction";
 import React, { useCallback, useRef } from "react";
-import { GoogleMap, useLoadScript } from "react-google-maps";
-import "./reset.css";
-import "./style.css";
-import Direction from "./Test2";
+import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 
-//import mapStyles from "./mapUtils/mapStyles";
+//import mapStyles from "./mapStyles";
 // 地図のデザインを指定することができます。
 // デザインは https://snazzymaps.com からインポートすることができます。
 
-
-
-const GoogleMapComponent = () => {
-
 const libraries = ["places"];
 const mapContainerStyle = {
-  height: "800px",
+  height: "60vh",
   width: "100%",
 };
 // 地図の大きさを指定します。
 
-const options = {
-    styles: mapContainerStyle,
-    disableDefaultUI: true,
-    // デフォルトUI（衛星写真オプションなど）をキャンセルします。
-    zoomControl: true
-  };
+/*const options = {
+  styles: mapStyles,
+  disableDefaultUI: true,
+  // デフォルトUI（衛星写真オプションなど）をキャンセルします。
+  zoomControl: true,
+};
+*/
 
-  const isLoaded = useLoadScript({
-    googleMapsApiKey: "AIzaSyDTLyFAxJqkD9w4Kr4Ju0MJNH_rrs3Ygnk",
+export default function GoogleMapComponent() {
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey:"AIzaSyDTLyFAxJqkD9w4Kr4Ju0MJNH_rrs3Ygnk",
     // ここにAPIキーを入力します。今回は.envに保存しています。
-    libraries
+    libraries,
   });
 
   const mapRef = useRef();
@@ -38,12 +34,12 @@ const options = {
   }, []);
   //API読み込み後に再レンダーを引き起こさないため、useStateを使わず、useRefとuseCallbackを使っています。
 
-  //if (loadError) return "Error";
-  //if (!isLoaded) return "Loading...";
+  if (loadError) return "Error";
+  if (!isLoaded) return "Loading...";
 
   return (
+    <>
       <GoogleMap
-      style={{ height: `100%` }}
         id="map"
         mapContainerStyle={mapContainerStyle}
         zoom={8}
@@ -53,13 +49,34 @@ const options = {
           lng: 141.49701,
         }}
 　　　　　// 札幌周辺にデフォルトのセンターを指定しました。
-        options={options}
+        
         onLoad={onMapLoad}
       >
         <Direction/>
       </GoogleMap>
+
+  <tr style={{ width: `100%` }}>
+  <td>
+    <button id="route-button">検索</button>
+  </td>
+  <td>
+    <button>クリア</button>
+  </td>
+  </tr>
+  <br/>
+  <tr>
+  <td>
+    <span>経由地5</span><br/>
+    <input type="text" id="way5"></input>
+  </td>
+  </tr>
+  <tr>
+  <td>
+    <span>到着地</span><br/>
+    <input type="text" id="end"></input>
+  </td>
+  </tr>
+</>
   );
 }
 
-export default GoogleMapComponent;
-  

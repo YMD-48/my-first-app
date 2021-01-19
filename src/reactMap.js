@@ -1,5 +1,6 @@
 /*global google*/
-import React from "react";
+import React,{useState} from 'react';
+import { db } from "./firebase";
 import ReactDOM from "react-dom";
 import "./reset.css";
 import "./style.css";
@@ -12,80 +13,188 @@ import {
   DirectionsRenderer,
 
 } from "react-google-maps";
+import { render } from '@testing-library/react';
+
+     
+
+      
+
+const Map = compose(
 
 
-
-
-
-
-
-const MapWithADirectionsRenderer = compose(
   withProps({
     googleMapURL:
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyDTLyFAxJqkD9w4Kr4Ju0MJNH_rrs3Ygnk&v=3.exp&libraries=drawing,geometry,places,visualization",
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `800px` }} />,
-    mapElement: <div style={{ height: `60%`,width: `100%` }} />
+    mapElement: <div style={{ height: `80%`,width: `100%` }} />
   }),
   withScriptjs,
   withGoogleMap,
   
 
   lifecycle({
+
+    
     componentDidMount() {
       const DirectionsService = new google.maps.DirectionsService();
-          // ルートをクリア
-      const clearRoute = function() {
-        DirectionsService.setMap(null);
-        //$('#route-panel').html('');
-        //$('#result').addClass('hidden');
+      const DirectionsRenderer = new google.maps.DirectionsRenderer();
+      var wayPoints = new Array();
+      //const [resultTime,setresultTime] = useState(0);
+      
+      //下記のように直接入力は入る。
+      /*
+      wayPoints.push({location: '東京タワー'});
+      wayPoints.push({location: 'スカイツリー'});
+      
+      render(function(querySnapshot) {
+     for (var i=1; i<=querySnapshot.size; i++) {
+      wayPoints.push({location :"清水寺"});
+      console.log("繰り返し"+wayPoints);
+      }
+    
+     });
+      */
+
+      const mainMap0 = () =>{
+        navigator.geolocation.watchPosition((position) => {
+          this.setState({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+          
+        },
+        (err) => {
+          console.log(err);
+        })
       };
 
-      //for文で経由地点分を繰り返して、場所の値をとってくるパターン。
-      var wayPoints = new Array();
-      for (var i=1; i<=6; i++) {
-        wayPoints.push({location :i});
+      //データベースアクセスのFOR文はなぜかダメ
+  
+      const mainMap1 = ()=> { 
+      const data = db.collection("irai").where("status", "==", "×")
+      .get()
+      .then(function(querySnapshot) {   
+        querySnapshot.forEach(function(doc) { 
+            //console.log(doc.id, " => ", doc.data().azukeru);
+            console.log(querySnapshot.size);
+            //wayPoints.push({location: '東京タワー'});
+            ///if(querySnapshot.size===null){
+              ///console.log("全ての配達終了");
+            ///};
+            
+              wayPoints.push({location :doc.data().azukeru});
+            
+            console.log(wayPoints);
+        
       }
-      
-    //var way1 = useRef(null);
-    /*
-    //単純に経由地点を入れているパターン。
-     var wayPoints = new Array();
-     wayPoints.push({location: '東京タワー'});
-     wayPoints.push({location: 'スカイツリー'});
-     wayPoints.push({location: ''});
-     wayPoints.push({location: ''});
-     wayPoints.push({location: ''});
-     */
+      )})
+      .catch(function(error) {
+          console.log("Error getting documents: ", error);
+      });
 
-      DirectionsService.route(
+      return data;
+      
+    };
+
+
+    const mainMap2 = ()=>{DirectionsService.route(
+       /// console.log(wayPoints),
+
         {
-          origin: new google.maps.LatLng(35.6809591, 139.7673068),
-          destination: new google.maps.LatLng(35.6598003, 139.7023894),
+          origin: new google.maps.LatLng({lat: this.state.lat, lng: this.state.lng}),
+          destination: new google.maps.LatLng({lat: this.state.lat, lng: this.state.lng}),
           avoidHighways: true,
           travelMode: google.maps.TravelMode.DRIVING,
           optimizeWaypoints:  true,
           waypoints: wayPoints
-
+        
         },
         (result, status) => {
+          
           if (status === google.maps.DirectionsStatus.OK) {
             this.setState({
               directions: result
             });
-          } else {
-            console.error(`error fetching directions ${result}`);
-          }
-        }
-      );
+
+            var sec = 0;
+
+            for(var i=0;i<result.routes[0].legs.length;i++){
+              sec += result.routes[0].legs[i].duration.value;
+              console.log(result.routes[0].legs[i].duration)
+              console.log(sec)
+            }
+
+            console.log(sec)
+
+            const resultTime = sec/60;
+            alert(resultTime);
+            /*
+            this.setresultTime{
+              resultTime;
+            }
+            */
+            console.log(resultTime)
+
+            return resultTime;
+            
+            /*
+        function cal (result,data){
+        DirectionsRenderer.setDirections(result);
+				var points = result.routes[0].waypoint_order;
+				var legs = result.routes[0].legs;
+				
+				// 総距離と総時間の合計する
+				var dis = 0;
+				var sec = 0;
+				for(var i=1; i<data.length; i++) {
+          console.log(data.length)
+					//sec += val.duration.value;
+					//dis += val.distance.value;
+				};
+				console.log("distance=" + dis + ", secound=" + sec);
+			
+      }
+      
+      cal;
+      }
+			}
+
+           */
+        
+    }})};
+    
+
+      async function processAll() {
+        await mainMap0();
+        await mainMap1();
+        await mainMap2();
+
+      };
+      
+      processAll();
+      
+      
+
+     // new window.google.maps
+      
+          // ルートをクリア
+      //const clearRoute = function() {
+        //DirectionsService.setMap(null);
+        //$('#route-panel').html('');
+        //$('#result').addClass('hidden');
+      
+
+      //for文で経由地点分を繰り返して、場所の値をとってくるパターン。
 
 
-
+      
     }
   })
 )(props =>(
   <>
-  <GoogleMap defaultZoom={8} defaultCenter={{ lat:35.6809591, lng:139.7673068}}>
+  <GoogleMap defaultZoom={10} defaultCenter={{origin}}>
+    
   {props.directions && <DirectionsRenderer directions={props.directions} />}
   </GoogleMap>
   
@@ -99,12 +208,6 @@ const MapWithADirectionsRenderer = compose(
         </td>
     </tr>
     <br/>
-    <tr style={{ width: `100%`,display: `flex` }}>
-      <td>
-          <span>出発地</span><br/>
-          <input type="text" id="start"></input>
-      </td>
-    </tr>
     <tr>
       <td>
           <span>経由地1</span><br/>
@@ -135,12 +238,6 @@ const MapWithADirectionsRenderer = compose(
           <input type="text" id="way5"></input>
       </td>
     </tr>
-    <tr>
-      <td>
-          <span>到着地</span><br/>
-          <input type="text" id="end"></input>
-      </td>
-    </tr>
   </div>
 </>
 
@@ -151,4 +248,4 @@ const MapWithADirectionsRenderer = compose(
   document.getElementById("root")
 );*/
 
-export default MapWithADirectionsRenderer;
+export default Map;

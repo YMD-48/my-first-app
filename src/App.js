@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { db } from "./firebase";
 import "./reset.css";
 import "./style.css";
 //import nextFlow from "./nextFlow";
 import Data from "./Data";
-import { BrowserRouter, Route} from 'react-router-dom';
+import { BrowserRouter, Link, Route,Switch,Router} from 'react-router-dom';
 import firebase from "firebase/app";
 
 
@@ -21,6 +22,7 @@ import ImgPath_sonota from "./images/sonota.jpg";
 
 const App = () => {
   // 1.記述
+  
   const [data, setData] = useState([{
     id: "",
     name: "",
@@ -75,9 +77,10 @@ const App = () => {
     setInputMail(e.target.value);
     setInputPhone(e.target.value);
   */
-
+  var hako =[];
   // 記述登録3
   const addInputData = () => {
+    
     db.collection("irai").add({
       azukeru: inputAzukeru,
       uketoru: inputUketoru,
@@ -93,7 +96,22 @@ const App = () => {
 
 
     });
-    
+    var obj ={
+      "azukeru": inputAzukeru,
+      "uketoru": inputUketoru,
+      "item1": inputItem1,
+      "item2": inputItem2,
+      "item3": inputItem3,
+      "item4": inputItem4,
+      "item5": inputItem5,
+      "name": inputName,
+      "mail": inputMail,
+      "phone": inputPhone
+
+    }
+    hako.push(obj)
+    var setjson = JSON.stringify(obj);
+    localStorage.setItem("kakunin",setjson);
 
     setInputItem1(""); //inputValueに値を書き込む（更新）
     setInputItem2("");
@@ -103,17 +121,7 @@ const App = () => {
     setInputName("");
     setInputMail("");
     setInputPhone("");
-      
-    return(
-      <>
-      <BrowserRouter>
-        <div>
-          <Route exact path="/kakunin" component={Data} />
-        </div>
-      </BrowserRouter>
-      </>
-    );
-
+    
     
 
   };
@@ -142,6 +150,11 @@ const App = () => {
         }))
       );
     });
+
+    console.log(data);
+    localStorage.setItem("data",data);
+
+
     return () => firebaseData();
   }, []); //←ここに最後一つ書きたします
 
@@ -165,7 +178,7 @@ const App = () => {
           <img src={ImgPath_small}/>
         </td>
         <td class="table_td">
-          <input
+          <input class="Itembase"
               type="number"
               min="0"
               max="30"
@@ -182,7 +195,7 @@ const App = () => {
         <img src={ImgPath_middle}/>
         </td>
         <td class="table_td">
-          <input
+          <input class="Itembase"
             type="number"
             min="0"
             max="30"
@@ -200,7 +213,7 @@ const App = () => {
         <img src={ImgPath_big}/>
         </td>
         <td class="table_td">
-          <input
+          <input class="Itembase"
               type="number"
               min="0"
               max="30"
@@ -218,7 +231,7 @@ const App = () => {
         <img src={ImgPath_okimono}/>
         </td>
         <td class="table_td">
-          <input
+          <input class="Itembase"
               type="number"
               min="0"
               max="30"
@@ -236,26 +249,31 @@ const App = () => {
         <img src={ImgPath_sonota}/>
         </td>
         <td class="table_td">
-          <input
+          <input class="Itembase"
               type="number"
               min="0"
               max="30"
+              step="1"
               label="タイプ5"
               value={inputItem5}
               onChange={handleInputChangeItem5}
             />
         </td>
+
         
         </tr>
         <br/>
         <button disabled={!inputName&&!inputMail&&inputPhone} onClick={addInputData}>
-          
-            確認画面へ進む
-          
+        <Router>
+          <Link to="/kakunin"> 確認画面へ進む</Link>
+        </Router>
         </button>
 
       </form>
 
+      <Switch>
+          <Route exact path="/kakunin" component={Data} />
+      </Switch>
       
 
       </div>
