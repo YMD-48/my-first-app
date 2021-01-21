@@ -1,6 +1,9 @@
 import React,{useState} from 'react';
 import GoogleMapReact from 'google-map-react';
 import AzukeruMap3 from './AzukeruMap3';
+import { BrowserRouter as Link } from "react-router-dom";
+import App from "./App";
+import Data from "./Data";
 import "./reset.css";
 
 
@@ -13,6 +16,7 @@ function AzukeruMap2() {
     const [address, setAddress] = useState(null);
     const [marker, setMarker] = useState(null);
     const [Info, setInfo] = useState(null);
+    localStorage.clear()
 
     const defaultLatLng = {
         lat: 35.6809591,
@@ -39,6 +43,11 @@ function AzukeruMap2() {
                     position: results[0].geometry.location,
                 }));
                 setInfo(results[0].formatted_address);
+
+                var obj =results[0].formatted_address;
+                  localStorage.setItem("azukeru",obj);
+
+                console.log(results[0]);
                 console.log(results[0].formatted_address);
                 console.log(results[0].geometry.location.lat());
                 console.log(results[0].geometry.location.lng());
@@ -48,20 +57,26 @@ function AzukeruMap2() {
 
     return (
         <>
-            <div id="AzukeruMap" style={{height: '600px', width: '100%' }}>
+            <div id="AzukeruMap" style={{height: '100vw', width: '100%' }}>
                 <GoogleMapReact
                     googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTLyFAxJqkD9w4Kr4Ju0MJNH_rrs3Ygnk&v=3.exp&libraries=drawing,geometry,places,visualization"
                     bootstrapURLKeys={{ key: "AIzaSyDTLyFAxJqkD9w4Kr4Ju0MJNH_rrs3Ygnk" }}
                     defaultCenter={defaultLatLng}
-                    defaultZoom={16}
+                    defaultZoom={15}
                     onGoogleApiLoaded={handleApiLoaded} />
-                <input type="text" onChange={(e) => setAddress(e.target.value)} />
-                <button type="button" onClick={search}>Search</button>
-                <div>{Info}</div>
+                <input className="input_Azukeru" type="text" onChange={(e) => setAddress(e.target.value)} />
+                <button type="button" onClick={search}>検索する</button>
+                <div>【預け場所】{Info}</div>
             </div>
             
             <AzukeruMap3/>
-
+            
+            <br/>
+            <div  className="next_button">
+                <button disabled>
+                <Link to="/app"><a href="/app">次へ進む</a></Link>
+                </button>
+            </div>
 
         </>
     );

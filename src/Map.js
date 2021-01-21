@@ -1,5 +1,5 @@
 /*global google*/
-import React,{useState} from 'react';
+import React,{useEffect} from 'react';
 import { db } from "./firebase";
 import ReactDOM from "react-dom";
 import "./reset.css";
@@ -29,6 +29,7 @@ import { render } from '@testing-library/react';
 Timeover();
 
 */
+localStorage.removeItem("Time");
 
 const Map = compose(
 
@@ -85,6 +86,7 @@ const Map = compose(
       };
 
       //データベースアクセスのFOR文はなぜかダメ
+      //const hako =[];
   
       const mainMap1 = ()=> { 
       const data = db.collection("irai").where("status", "==", "×")
@@ -92,23 +94,29 @@ const Map = compose(
       .then(function(querySnapshot) {   
         querySnapshot.forEach(function(doc) { 
             //console.log(doc.id, " => ", doc.data().azukeru);
-            console.log(querySnapshot.size);
             //wayPoints.push({location: '東京タワー'});
             ///if(querySnapshot.size===null){
               ///console.log("全ての配達終了");
             ///};
+           // hako.push(doc.id);
+           //localStorage.setItem("id",hako);
             
-              wayPoints.push({location :doc.data().azukeru});
+          wayPoints.push({location :doc.data().uketoru});
+            
             
             console.log(wayPoints);
         
-      }
-      )})
+      })})
       .catch(function(error) {
           console.log("Error getting documents: ", error);
       });
-
+     // console.log(hako)
+      //localStorage.removeItem("id")
+        
+    
+      
       return data;
+      
       
     };
 
@@ -132,6 +140,8 @@ const Map = compose(
               directions: result
             });
             console.log(result);
+
+            localStorage.setItem("id",result.id);
             var sec = 0;
 
             for(var i=0;i<result.routes[0].legs.length;i++){
@@ -142,8 +152,8 @@ const Map = compose(
 
             console.log(sec)
 
-            const resultTime = sec/60;
-            
+            const resultTime = Math.floor(sec/60);
+            localStorage.setItem("Time",resultTime);
             /*
             this.setresultTime{
               resultTime;
@@ -151,7 +161,6 @@ const Map = compose(
             */
             console.log(resultTime)
 
-            return resultTime;
             
             /*
         function cal (result,data){
@@ -190,7 +199,6 @@ const Map = compose(
       
       processAll();
       
-      
 
      // new window.google.maps
       
@@ -209,14 +217,15 @@ const Map = compose(
   })
 )(props =>(
   
-  <>
-  <GoogleMap defaultZoom={10} defaultCenter={{origin}}>
+  <div>
+  <GoogleMap Zoom={12} Center={{origin}}>
     
   {props.directions && <DirectionsRenderer directions={props.directions} />}
   </GoogleMap>
-  
+  <div className="Time">所要時間（想定）：{localStorage.getItem("Time")}分</div>
 
-  </>
+
+  </div>
 
 ));
 

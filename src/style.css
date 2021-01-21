@@ -13,23 +13,16 @@ h1{
 }
 
 img{
-    height:300px;
-    width:300px;
+    width : 50vw;
 }
-.table{
-    display: flex;
-    text-align:center;
-}
+
 .table_td{
     text-align:center;
 }
 
 .kakunin{
-    width:500px;
     text-align:center;
-    margin-left:auto;
-    margin-right:auto;
-    height:auto;
+ 
 }
 
 
@@ -46,7 +39,7 @@ iframe{
 }
 tr{
     width: 100%;
-    position:center;
+    
 }
 
 #AzukeruMap{
@@ -54,9 +47,29 @@ tr{
 }
 
 .Itembase{
-    height:20px;
-    width:100px;
-    margin-top: 140px;
-    margin-bottom: 140px;
-    margin-left: 20px;
+  margin:100%;
+}
+
+.Time{
+    
+    font-size:28px;
+    font-style: bold;
+}
+
+.next_button{
+    left:50%;
+    right:50%;
+    text-align:center;
+}
+
+.input_Azukeru{
+    height:30px;
+}
+
+.kakunin_Item{
+   right:30px
+}
+
+th{
+    width: 20vw;
 }

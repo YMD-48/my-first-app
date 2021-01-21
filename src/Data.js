@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import TaskItem from "./TaskItem";
 import { db } from "./firebase";
+import "./reset.css";
+import "./style.css";
+import Map from './Map';
 
 
 
@@ -17,12 +20,11 @@ const Data = () => {
     item2:"",
     item3:"",
     item4:"",
-    item5:"",
     name:"",
     mail:"",
     phone:"",
     time:null,
-    status:"×"
+    status:""
   
   }]);
 
@@ -40,11 +42,11 @@ const Data = () => {
           item2:dbData.data().item2,
           item3:dbData.data().item3,
           item4:dbData.data().item4,
-          item5:dbData.data().item5,
           name:dbData.data().name,
           phone:dbData.data().phone,
           mail:dbData.data().mail,
-          time: dbData.data().time
+          time: dbData.data().time,
+          status: dbData.data().status,
 
         }))
       );
@@ -56,15 +58,46 @@ const Data = () => {
 
   }, []);
   
+  /*未完*/
+    function Test (){
+
+      const firebaseData = db
+      .collection("irai")
+      .orderBy("name", "asc")
+      .onSnapshot((snapshot) => {
+        setData(
+          snapshot.docs.map((dbData) => ({
+            id: dbData.id,
+            azukeru: dbData.data().azukeru,
+            uketoru: dbData.data().uketoru,
+            item1:dbData.data().item1,
+            item2:dbData.data().item2,
+            item3:dbData.data().item3,
+            item4:dbData.data().item4,
+            name:dbData.data().name,
+            phone:dbData.data().phone,
+            mail:dbData.data().mail,
+            time: dbData.data().time,
+            status: "〇",
+  
+          }))
+        )})
+
+        return () => firebaseData();
+      }
+        
+  
   
   return (
-   
+    
+   <>
+   <Map></Map>
     <div>
       {/* dataっていう変数のなかに全てのデータが入っているのでmapを使って展開 */}
       {data.map((dataItem) => (
         ///<h1 key={dataItem.id}>{dataItem.title}</h1>
     
-        
+       <div>
           <TaskItem
           id={dataItem.id}
           azukeru={dataItem.azukeru}
@@ -73,14 +106,24 @@ const Data = () => {
           item2={dataItem.item2}
           item3={dataItem.item3}
           item4={dataItem.item4}
-          item5={dataItem.item5}
           name={dataItem.name}
           mail={dataItem.mail}
           phone={dataItem.phone}
+          status={dataItem.status}
+          >
+          
+          </TaskItem>
+      
 
-          /> 
+      </div>
+
       ))}
     </div>
+    <div className="next_button">
+      <button onClick={Test}>配達全て完了</button>
+    </div>
+  </>
+
   )
 
   

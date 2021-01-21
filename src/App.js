@@ -1,28 +1,22 @@
 
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
-import { db } from "./firebase";
+import React, { useState } from "react";
 import "./reset.css";
 import "./style.css";
-//import nextFlow from "./nextFlow";
-import Data from "./Data";
-import { BrowserRouter, Link, Route,Switch,Router} from 'react-router-dom';
-import firebase from "firebase/app";
+import { BrowserRouter as Link } from "react-router-dom";
+
 
 
 import ImgPath_small from "./images/small.jpg";
 import ImgPath_middle from "./images/middle.jpg";
-import ImgPath_big from "./images/big.jpg";
-import ImgPath_okimono from "./images/okimono.jpg";
+import ImgPath_large from "./images/large.jpg";
 import ImgPath_sonota from "./images/sonota.jpg";
-
 
 
 
 
 const App = () => {
   // 1.記述
-  
+  /*
   const [data, setData] = useState([{
     id: "",
     name: "",
@@ -39,19 +33,17 @@ const App = () => {
     time:null
 
   }]);
+  */
   // 記述登録1
-  const [inputAzukeru, setInputAzukeru] = useState("");
-  const [inputUketoru, setInputUketoru] = useState("");
-  const [inputItem1, setInputItem1] = useState("");
-  const [inputItem2, setInputItem2] = useState("");
-  const [inputItem3, setInputItem3] = useState("");
-  const [inputItem4, setInputItem4] = useState("");
-  const [inputItem5, setInputItem5] = useState("");
-  const [inputName, setInputName] = useState("");
-  const [inputMail, setInputMail] = useState("");
-  const [inputPhone, setInputPhone] = useState("");
+  const [inputItem1, setInputItem1] = useState("0");
+  const [inputItem2, setInputItem2] = useState("0");
+  const [inputItem3, setInputItem3] = useState("0");
+  const [inputItem4, setInputItem4] = useState("0");
+
+  
 
   // 記述登録２
+  
   const handleInputChangeItem1 = (e) => {
     console.log(e, "event");
     setInputItem1(e.target.value); //inputValueに値を書き込む（更新）
@@ -68,19 +60,18 @@ const App = () => {
     console.log(e, "event");
     setInputItem4(e.target.value);
   };
-  const handleInputChangeItem5 = (e) => {
-    console.log(e, "event");
-    setInputItem5(e.target.value);
-  };
+ 
+
   /*      
     setInputName(e.target.value);
     setInputMail(e.target.value);
     setInputPhone(e.target.value);
   */
-  var hako =[];
+ 
   // 記述登録3
   const addInputData = () => {
     
+    /*
     db.collection("irai").add({
       azukeru: inputAzukeru,
       uketoru: inputUketoru,
@@ -96,23 +87,26 @@ const App = () => {
 
 
     });
-    var obj ={
-      "azukeru": inputAzukeru,
-      "uketoru": inputUketoru,
-      "item1": inputItem1,
-      "item2": inputItem2,
-      "item3": inputItem3,
-      "item4": inputItem4,
-      "item5": inputItem5,
-      "name": inputName,
-      "mail": inputMail,
-      "phone": inputPhone
+    */
+   localStorage.removeItem("Items1");
+   localStorage.removeItem("Items2");
+   localStorage.removeItem("Items3");
+   localStorage.removeItem("Items4");
 
-    }
-    hako.push(obj)
-    var setjson = JSON.stringify(obj);
-    localStorage.setItem("kakunin",setjson);
 
+    var obj1 =inputItem1;
+    var obj2 =inputItem2;
+    var obj3 =inputItem3;
+    var obj4 =inputItem4;
+
+    
+    localStorage.setItem("Items1",obj1);
+    localStorage.setItem("Items2",obj2);
+    localStorage.setItem("Items3",obj3);
+    localStorage.setItem("Items4",obj4);
+
+
+    /*
     setInputItem1(""); //inputValueに値を書き込む（更新）
     setInputItem2("");
     setInputItem3("");
@@ -121,12 +115,13 @@ const App = () => {
     setInputName("");
     setInputMail("");
     setInputPhone("");
-    
+    */
     
 
   };
 
   // 2.記述
+  /*
   useEffect(() => {
     const firebaseData = db
     .collection("irai")
@@ -151,13 +146,9 @@ const App = () => {
       );
     });
 
-    console.log(data);
-    localStorage.setItem("data",data);
-
-
     return () => firebaseData();
   }, []); //←ここに最後一つ書きたします
-
+*/
   // // ここに記述,useStateで作ったdata変数をコンソールログで表示
   //console.log(data);
 
@@ -165,8 +156,8 @@ const App = () => {
 
   return (
 
-    <>
-    <div class="kakunin">
+    
+    <div className="Items">
       <h1>荷物の種類と個数</h1>
 
       {/* 登録の処理 */}
@@ -180,6 +171,7 @@ const App = () => {
         <td class="table_td">
           <input class="Itembase"
               type="number"
+              defaultValue="0"
               min="0"
               max="30"
               label="タイプ１"
@@ -197,6 +189,7 @@ const App = () => {
         <td class="table_td">
           <input class="Itembase"
             type="number"
+            defaultValue="0"
             min="0"
             max="30"
             label="タイプ２"
@@ -210,11 +203,12 @@ const App = () => {
         <tr class="table">
         {/* inputタグ */}
         <td>
-        <img src={ImgPath_big}/>
+        <img src={ImgPath_large}/>
         </td>
         <td class="table_td">
           <input class="Itembase"
               type="number"
+              defaultValue="0"
               min="0"
               max="30"
               label="タイプ3"
@@ -228,11 +222,12 @@ const App = () => {
         <tr class="table">
         {/* inputタグ */}
         <td>
-        <img src={ImgPath_okimono}/>
+        <img src={ImgPath_sonota}/>
         </td>
         <td class="table_td">
           <input class="Itembase"
               type="number"
+              defaultValue="0"
               min="0"
               max="30"
               label="タイプ4"
@@ -240,50 +235,24 @@ const App = () => {
               onChange={handleInputChangeItem4}
             />
         </td>
-       
-        </tr>
-
-        <tr class="table">
-        {/* inputタグ */}
-        <td>
-        <img src={ImgPath_sonota}/>
-        </td>
-        <td class="table_td">
-          <input class="Itembase"
-              type="number"
-              min="0"
-              max="30"
-              step="1"
-              label="タイプ5"
-              value={inputItem5}
-              onChange={handleInputChangeItem5}
-            />
-        </td>
 
         
         </tr>
         <br/>
-        <button disabled={!inputName&&!inputMail&&inputPhone} onClick={addInputData}>
-        <Router>
-          <Link to="/kakunin"> 確認画面へ進む</Link>
-        </Router>
-        </button>
-
       </form>
 
-      <Switch>
-          <Route exact path="/kakunin" component={Data} />
-      </Switch>
-      
+      <div className="next_button">
+        <button className="next_button" onClick={addInputData}>
+        <Link to="/Kakunin"><a href="/Kakunin">確認画面へ進む</a></Link>
 
-      </div>
+        </button>
+      </div>   
 
-       {/* 登録の処理　ボタン */}
-      
+    </div>
       
      
 
-    </>  
+   
   );
 };
 export default App;
