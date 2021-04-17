@@ -158,7 +158,7 @@ const App = () => {
 
     
     <div className="Items">
-      <h1>荷物の種類と個数</h1>
+      <h1>荷物の種類</h1>
 
       {/* 登録の処理 */}
       <form>
